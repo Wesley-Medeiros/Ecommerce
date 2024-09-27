@@ -1,9 +1,13 @@
-"use client";
+'use client';
 
 import { useState, useEffect, useRef } from "react";
 import { Vector } from "./vector";
 
-export function TopBar() {
+interface TopBarProps {
+    onSortChange: (sortType: string) => void; // Nova prop para comunicar a escolha de ordenação
+}
+
+export function TopBar({ onSortChange }: TopBarProps) {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -13,6 +17,11 @@ export function TopBar() {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setDropdownOpen(false);
         }
+    };
+
+    const handleSortSelection = (sortType: string) => {
+        onSortChange(sortType);
+        setDropdownOpen(false); // Fechar dropdown ao selecionar
     };
 
     useEffect(() => {
@@ -46,16 +55,19 @@ export function TopBar() {
                     >
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
+                            onClick={() => handleSortSelection("recentes")} 
                         >
                             Mais Recentes
                         </button>
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
+                            onClick={() => handleSortSelection("menorPreco")} 
                         >
                             Menor Preço
                         </button>
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
+                            onClick={() => handleSortSelection("maiorPreco")} 
                         >
                             Maior Preço
                         </button>

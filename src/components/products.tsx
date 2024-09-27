@@ -22,9 +22,10 @@ interface Filters {
 
 interface ProductsProps {
     filters: Filters;
+    sortType: string; // Nova prop para o tipo de ordenação
 }
 
-export function Products({ filters }: ProductsProps) {
+export function Products({ filters, sortType }: ProductsProps) {
     const [products, setProducts] = useState<Product[]>([]);
     const [visibleCount, setVisibleCount] = useState<number>(9);
     const [initialVisibleCount] = useState<number>(9); 
@@ -57,7 +58,18 @@ export function Products({ filters }: ProductsProps) {
         setVisibleCount(initialVisibleCount);
     };
 
-    const filteredProducts = products.filter(product => {
+    const sortedProducts = [...products].sort((a, b) => {
+        if (sortType === 'recentes') {
+            return new Date(b.date).getTime() - new Date(a.date).getTime(); // Ordenar por data (mais recentes primeiro)
+        } else if (sortType === 'menorPreco') {
+            return a.price - b.price; // Ordenar por menor preço
+        } else if (sortType === 'maiorPreco') {
+            return b.price - a.price; // Ordenar por maior preço
+        }
+        return 0;
+    });
+
+    const filteredProducts = sortedProducts.filter(product => {
         const matchesColor = filters.colors.length === 0 || filters.colors.includes(product.color);
         const matchesSize = filters.sizes.length === 0 || product.size.some(size => filters.sizes.includes(size));
         const matchesPrice = !filters.priceRange || (product.price >= filters.priceRange.min && product.price <= filters.priceRange.max);
