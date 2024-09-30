@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Vector } from "./vector";
 
 interface TopBarProps {
-    onSortChange: (sortType: string) => void; // Nova prop para comunicar a escolha de ordenação
+    onSortChange: (sortType: string) => void; 
 }
 
 export function TopBar({ onSortChange }: TopBarProps) {
@@ -21,7 +21,7 @@ export function TopBar({ onSortChange }: TopBarProps) {
 
     const handleSortSelection = (sortType: string) => {
         onSortChange(sortType);
-        setDropdownOpen(false); // Fechar dropdown ao selecionar
+        setDropdownOpen(false);
     };
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export function TopBar({ onSortChange }: TopBarProps) {
                 <div className="relative inline-block text-left" ref={dropdownRef}>
                     <button
                         onClick={toggleDropdown}
-                        className="flex items-center justify-center w-36 h-10 border-[1px] gap-2 border-black text-[16px]"
+                        className="flex items-center justify-center w-36 h-10 border gap-2 border-black text-[16px] hover:bg-gray-200 transition-colors duration-300"
                         aria-expanded={isDropdownOpen}
                         aria-controls="dropdown-menu"
                     >
@@ -51,23 +51,23 @@ export function TopBar({ onSortChange }: TopBarProps) {
 
                     <div
                         id="dropdown-menu"
-                        className={`absolute right-0 w-36 overflow-hidden transition-all duration-300 ease-in-out ${isDropdownOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"} shadow-lg border-[1px] border-black border-t-0 bg-white ring-1 ring-black ring-opacity-5`}
+                        className={`absolute right-0 w-36 overflow-hidden transition-all duration-500 ease-in-out ${isDropdownOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"} shadow-lg border-[1px] border-black border-t-0 bg-white ring-1 ring-black ring-opacity-5`}
                     >
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
-                            onClick={() => handleSortSelection("recentes")} 
+                            onClick={() => handleSortSelection("recentes")}
                         >
                             Mais Recentes
                         </button>
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
-                            onClick={() => handleSortSelection("menorPreco")} 
+                            onClick={() => handleSortSelection("menorPreco")}
                         >
                             Menor Preço
                         </button>
                         <button
                             className="flex items-center justify-center w-full py-2 text-[15px] hover:bg-orange-400 hover:text-white transition-colors duration-300"
-                            onClick={() => handleSortSelection("maiorPreco")} 
+                            onClick={() => handleSortSelection("maiorPreco")}
                         >
                             Maior Preço
                         </button>
