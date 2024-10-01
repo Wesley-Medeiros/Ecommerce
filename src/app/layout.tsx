@@ -24,9 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={mainFont.className}>
         <Header />
-        {children}
+        <main>
+          {children}
+        </main>
         <Footer />
-        </body>
+      </body>
     </html>
   );
 }
