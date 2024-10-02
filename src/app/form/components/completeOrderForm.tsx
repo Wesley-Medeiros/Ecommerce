@@ -6,7 +6,7 @@ import { PaymentMethodOptions } from "./payment-method-options";
 
 export function CompleteOrderForm() {
     return (
-        <div className="flex flex-col gap-3 w-[640px]">
+        <div className="flex flex-col gap-3 w-[640px] flex-1">
             <p className="font-bold text-xs">Complete seu pedido</p>
 
             <div className="space-y-3">
@@ -24,7 +24,7 @@ export function CompleteOrderForm() {
 
                 <div className="w-full bg-gray-100 rounded-md p-10 flex flex-col gap-2">
                     <div className="flex gap-2">
-                        <BiDollar size={30} className="text-purple-500" />
+                        <BiDollar size={30} className="text-orange-400" />
                         <div>
                             <p className="text-xl">Pagamento</p>
                             <p className="text-slate-500">O pagamento é feito na entrega. Escolha a forma que deseja pagar</p>
