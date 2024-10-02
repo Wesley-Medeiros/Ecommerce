@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Header } from "../components/header";
 import { Footer } from "@/components/footer";
+import { CartProvider } from "@/context/cart-context";
 
 const mainFont = Open_Sans({
   weight: ['300', '400', '700'],
@@ -22,13 +23,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={mainFont.className}>
-        <Header />
-        <main>
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <CartProvider>
+        <body className={mainFont.className}>
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </CartProvider>
     </html>
   );
 }

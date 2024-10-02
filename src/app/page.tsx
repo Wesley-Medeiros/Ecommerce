@@ -16,12 +16,12 @@ export default function Home() {
     const [sortType, setSortType] = useState<string>(''); 
 
     return (
-        <main className="flex flex-col">
-            <TopBar onSortChange={setSortType} />
-            <div className="flex px-40 py-8 gap-[200px]">
-              <FilterContent onFilterChange={setFilters} />
-              <Products filters={filters} sortType={sortType} />
-            </div>
-        </main>
+            <main className="flex flex-col">
+                <TopBar onSortChange={setSortType} />
+                <div className="flex px-40 py-8 gap-[200px]">
+                    <FilterContent onFilterChange={setFilters} />
+                    <Products filters={filters} sortType={sortType} />
+                </div>
+            </main>
     );
 }
