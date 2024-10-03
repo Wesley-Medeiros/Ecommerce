@@ -27,13 +27,6 @@ export function ConfirmationOrder() {
                     <p className="font-bold text-xl">R$ {finalTotal.toFixed(2)}</p>  
                 </div>
             </div>
-
-            <Link href="/confirmedOrder">
-                <button className="bg-orange-400 flex items-center justify-center py-3 w-full rounded-lg text-white font-bold transition duration-300 ease-in-out hover:bg-orange-500">
-                    CONFIRMAR PEDIDO
-                </button>
-            </Link>
-
         </div>
     );
 }

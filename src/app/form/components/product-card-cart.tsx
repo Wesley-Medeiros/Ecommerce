@@ -40,6 +40,6 @@ export function ProductCardCart() {
                     </div>
                 ))
             )}
-        </div>
+            </div>
     );
 }

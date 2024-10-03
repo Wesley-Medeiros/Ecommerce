@@ -1,38 +1,42 @@
-import { PiMapPinLineThin } from "react-icons/pi";
-import { AddressForm } from "./address-form";
-import { BiDollar } from "react-icons/bi";
-import { PaymentMethodOptions } from "./payment-method-options";
+'use client'
 
+import * as zod from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, FormProvider } from "react-hook-form";
+import { FormOrder } from "./form-order";
+import { SelectedProducts } from "./selected-products";
+
+const confirmOrderFormValidationSchema = zod.object({
+    cep: zod.string().min(8, "CEP inválido"),
+    rua: zod.string().min(1, "Rua é obrigatória"),
+    numero: zod.string().min(1, "Número é obrigatório"),
+    complemento: zod.string().optional(),
+    bairro: zod.string().min(1, "Bairro é obrigatório"),
+    cidade: zod.string().min(1, "Cidade é obrigatória"),
+    uf: zod.string().min(2, "UF é obrigatória").max(2, "UF deve ter 2 caracteres")
+})
+
+export type OrderData = zod.infer<typeof confirmOrderFormValidationSchema>
+
+type ConfirmOrderFormData = OrderData
 
 export function CompleteOrderForm() {
+    const confirmOrderForm = useForm<ConfirmOrderFormData>({
+        resolver: zodResolver(confirmOrderFormValidationSchema)
+    })
+
+    const { handleSubmit } = confirmOrderForm;
+    
+    function handleConfirmOrder(data: ConfirmOrderFormData) {
+        console.log(data);
+    }
+    
     return (
-        <div className="flex flex-col gap-3 w-[640px] flex-1 mb-auto">
-            <p className="font-bold text-xs">Complete seu pedido</p>
-
-            <div className="space-y-3">
-                <div className="w-full bg-gray-100 rounded-md p-10 flex flex-col gap-2">
-                    <div className="flex gap-2">
-                        <PiMapPinLineThin size={30} className="text-orange-400" />
-                        <div>
-                            <p className="text-xl">Endereço da entrega</p>
-                            <p className="text-slate-500">Informe o endereço onde deseja receber seu pedido</p>
-                        </div>
-
-                    </div>
-                        <AddressForm />
-                </div>
-
-                <div className="w-full bg-gray-100 rounded-md p-10 flex flex-col gap-2">
-                    <div className="flex gap-2">
-                        <BiDollar size={30} className="text-orange-400" />
-                        <div>
-                            <p className="text-xl">Pagamento</p>
-                            <p className="text-slate-500">O pagamento é feito na entrega. Escolha a forma que deseja pagar</p>
-                        </div>
-                    </div>
-                        <PaymentMethodOptions />
-                </div>
-            </div>
-        </div>
+        <FormProvider {...confirmOrderForm }>
+            <form onSubmit={handleSubmit(handleConfirmOrder)} className='flex gap-8 w-full'>
+                <FormOrder />
+                <SelectedProducts /> 
+            </form>
+        </FormProvider>
     );
 }
