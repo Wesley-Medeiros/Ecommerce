@@ -1,23 +1,38 @@
-"use client"
+"use client";
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 
+export interface Product {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+}
+
 interface CartContextProps {
     cartCount: number;
-    addToCart: () => void;
+    cartItems: Product[];
+    addToCart: (product: Product) => void;
+    removeFromCart: (id: string) => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cartCount, setCartCount] = useState<number>(0);
+    const [cartItems, setCartItems] = useState<Product[]>([]);
 
-    const addToCart = () => {
-        setCartCount(prevCount => prevCount + 1);
+    const addToCart = (product: Product) => {
+        setCartItems((prevItems) => [...prevItems, product]);
     };
 
+    const removeFromCart = (id: string) => {
+        setCartItems((prevItems) => prevItems.filter(item => item.id !== id));
+    };
+
+    const cartCount = cartItems.length;
+
     return (
-        <CartContext.Provider value={{ cartCount, addToCart }}>
+        <CartContext.Provider value={{ cartCount, cartItems, addToCart, removeFromCart }}>
             {children}
         </CartContext.Provider>
     );

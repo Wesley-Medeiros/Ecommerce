@@ -89,7 +89,12 @@ export function Products({ filters, sortType }: ProductsProps) {
                         <p className='mb-[14px]'>até {product.parcelamento[0]}x de R$ {product.parcelamento[1].toFixed(2)}</p>
                         <button
                             className='w-full h-[33px] bg-black font-bold text-white transition duration-300 ease-in-out hover:bg-gray-800'
-                            onClick={addToCart}  
+                            onClick={() => addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price,
+                                image: product.image
+                            })}
                         >
                             COMPRAR
                         </button>
