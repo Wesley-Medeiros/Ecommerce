@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface Product {
-    id: string;
+    id: string; // O id original do produto
     name: string;
     price: number;
     image: string;
@@ -20,9 +20,16 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cartItems, setCartItems] = useState<Product[]>([]);
+    const [nextId, setNextId] = useState(1); // Estado para o próximo ID
 
     const addToCart = (product: Product) => {
-        setCartItems((prevItems) => [...prevItems, product]);
+        const newProduct = {
+            ...product,
+            id: `cart-item-${nextId}` // Gera um novo ID para o produto
+        };
+
+        setCartItems((prevItems) => [...prevItems, newProduct]);
+        setNextId(prevId => prevId + 1); // Incrementa o contador de ID
     };
 
     const removeFromCart = (id: string) => {
