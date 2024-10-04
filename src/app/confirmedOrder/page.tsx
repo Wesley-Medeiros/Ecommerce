@@ -1,9 +1,43 @@
-import Image from "next/image";
-import LastImg from '../../../public/img/Illustration.png';
-import { RiMapPin2Fill } from "react-icons/ri";
-import { PiTimerFill, PiCurrencyDollarFill } from "react-icons/pi";
+'use client';
 
-export default function ComfirmedOrder() {
+import { useRouter } from 'next/navigation'; 
+import Image from 'next/image';
+import LastImg from '../../../public/img/Illustration.png';
+import { RiMapPin2Fill } from 'react-icons/ri';
+import { PiTimerFill, PiCurrencyDollarFill } from 'react-icons/pi';
+import { useOrderContext } from '../../context/order-context'; 
+import { useEffect } from 'react';
+
+const paymentMethodLabels: Record<string, string> = {
+    credit: "Crédito",
+    debit: "Débito",
+    PIX: "PIX",
+};
+
+export default function ConfirmedOrder() {
+    const router = useRouter();
+    const { orderData } = useOrderContext();
+
+    useEffect(() => {
+        if (!orderData) {
+            router.push('/');
+        }
+    }, [orderData, router]);
+
+    if (!orderData) {
+        return null;
+    }
+
+    const {
+        rua,
+        numero,
+        complemento,
+        bairro,
+        cidade,
+        uf,
+        paymentMethods,
+    } = orderData;
+
     return (
         <div className="flex flex-col gap-10 mt-20 px-40 py-5">
             <div>
@@ -16,11 +50,11 @@ export default function ComfirmedOrder() {
                     <div className="flex gap-5 items-center">
                         <RiMapPin2Fill className="text-purple-400" size={40} />
                         <div>
-                            <p>Entrega em <strong>Rua Doutor Aniceto Varejão, 704</strong></p>
-                            <p>Piedade - Jaboatão dos Guararapes, PE</p>
+                            <p>Entrega em <strong>{rua}, {numero}{complemento ? `, ${complemento}` : ''}</strong></p>
+                            <p>{bairro} - {cidade}, {uf}</p>
                         </div>
                     </div>
-                    
+
                     <div className="flex gap-5 items-center">
                         <PiTimerFill className="text-orange-400" size={40} />
                         <div>
@@ -33,7 +67,8 @@ export default function ComfirmedOrder() {
                         <PiCurrencyDollarFill className="text-purple-400" size={40} />
                         <div>
                             <p>Pagamento</p>
-                            <p><strong>Cartão de crédito</strong></p>
+                            {/* Utilize o objeto de mapeamento para exibir o rótulo correto */}
+                            <p><strong>{paymentMethodLabels[paymentMethods]}</strong></p>
                         </div>
                     </div>
                 </div>

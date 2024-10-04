@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "../components/header";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/context/cart-context";
+import { OrderProvider } from "@/context/order-context";
 
 const mainFont = Open_Sans({
   weight: ['300', '400', '700'],
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <CartProvider>
-        <body className={mainFont.className}>
-          <Header />
-          <main>
-            {children}
-          </main>
-          <Footer />
-        </body>
+        <OrderProvider>
+          <body className={mainFont.className}>
+            <Header />
+            <main>
+              {children}
+            </main>
+            <Footer />
+          </body>
+        </OrderProvider>
       </CartProvider>
     </html>
   );
