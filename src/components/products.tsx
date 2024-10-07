@@ -26,17 +26,31 @@ interface ProductsProps {
     sortType: string;
 }
 
+const ProductSkeleton = () => {
+    return (
+        <div className='max-w-48 flex flex-col items-center animate-pulse'>
+            <div className='w-[195px] h-[195px] bg-gray-300 mb-[10px]' />
+            <div className='w-[100px] h-[19px] bg-gray-300 mb-[10px]'/>
+            <div className='w-[60px] h-[21px] bg-gray-300 mb-[1px]'/>
+            <div className='w-[120px] h-[14px] bg-gray-300 mb-[14px]'/>
+            <div className='w-full h-[33px] bg-gray-300'/>
+        </div>
+    );
+};
+
 export function Products({ filters, sortType }: ProductsProps) {
     const [products, setProducts] = useState<Product[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true); 
     const [visibleCount, setVisibleCount] = useState<number>(9);
     const [initialVisibleCount] = useState<number>(9);
-    const { addToCart } = useCart(); 
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProducts = async () => {
             const response = await fetch('http://localhost:3003/products');
             const data: Product[] = await response.json();
             setProducts(data);
+            setIsLoading(false); 
         };
 
         fetchProducts();
@@ -74,32 +88,38 @@ export function Products({ filters, sortType }: ProductsProps) {
                 className="grid grid-cols-3 gap-16 mb-[70px] transition-all duration-500 ease-in-out"
                 style={{ maxHeight: `${visibleCount * 280}px`, overflow: 'hidden' }}
             >
-                {filteredProducts.slice(0, visibleCount).map((product) => (
-                    <div key={product.id} className='max-w-48 flex flex-col items-center'>
-                        <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={195}
-                            height={195}
-                            className='w-[195px] mb-[10px]'
-                            priority
-                        />
-                        <h3 className='leading-[19px] text-[14px] mb-[10px]'>{product.name}</h3>
-                        <strong className='text-[16px] leading-[21px] mb-[1px]'>R$ {product.price.toFixed(2)}</strong>
-                        <p className='mb-[14px]'>até {product.parcelamento[0]}x de R$ {product.parcelamento[1].toFixed(2)}</p>
-                        <button
-                            className='w-full h-[33px] bg-black font-bold text-white transition duration-300 ease-in-out hover:bg-gray-800'
-                            onClick={() => addToCart({
-                                id: product.id,
-                                name: product.name,
-                                price: product.price,
-                                image: product.image
-                            })}
-                        >
-                            COMPRAR
-                        </button>
-                    </div>
-                ))}
+                {isLoading ? (
+                    Array.from({ length: visibleCount }).map((_, index) => (
+                        <ProductSkeleton key={index} />
+                    ))
+                ) : (
+                    filteredProducts.slice(0, visibleCount).map((product) => (
+                        <div key={product.id} className='max-w-48 flex flex-col items-center'>
+                            <Image
+                                src={product.image}
+                                alt={product.name}
+                                width={195}
+                                height={195}
+                                className='w-[195px] mb-[10px]'
+                                priority
+                            />
+                            <h3 className='leading-[19px] text-[14px] mb-[10px]'>{product.name}</h3>
+                            <strong className='text-[16px] leading-[21px] mb-[1px]'>R$ {product.price.toFixed(2)}</strong>
+                            <p className='mb-[14px]'>até {product.parcelamento[0]}x de R$ {product.parcelamento[1].toFixed(2)}</p>
+                            <button
+                                className='w-full h-[33px] bg-black font-bold text-white transition duration-300 ease-in-out hover:bg-gray-800'
+                                onClick={() => addToCart({
+                                    id: product.id,
+                                    name: product.name,
+                                    price: product.price,
+                                    image: product.image
+                                })}
+                            >
+                                COMPRAR
+                            </button>
+                        </div>
+                    ))
+                )}
             </div>
             <div className='flex items-center justify-center'>
                 {visibleCount < filteredProducts.length ? (
