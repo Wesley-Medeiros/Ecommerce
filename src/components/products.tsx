@@ -56,6 +56,30 @@ export function Products({ filters, sortType }: ProductsProps) {
         fetchProducts();
     }, []);
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 640px)');
+        if (mediaQuery.matches) {
+            setVisibleCount(4); // Se sim, renderiza 4 produtos
+        } else {
+            setVisibleCount(initialVisibleCount); // Caso contrário, renderiza o número inicial
+        }
+
+        const handleResize = (event: MediaQueryListEvent) => {
+            if (event.matches) {
+                setVisibleCount(4);
+            } else {
+                setVisibleCount(initialVisibleCount);
+            }
+        };
+
+        mediaQuery.addEventListener('change', handleResize);
+        
+        // Cleanup listener
+        return () => {
+            mediaQuery.removeEventListener('change', handleResize);
+        };
+    }, [initialVisibleCount]);
+
     const sortedProducts = [...products].sort((a, b) => {
         if (sortType === 'recentes') {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -75,7 +99,8 @@ export function Products({ filters, sortType }: ProductsProps) {
     });
 
     const handleLoadMore = () => {
-        setVisibleCount(prevCount => prevCount + 9);
+        const increment = visibleCount === 4 ? 4 : 9;
+        setVisibleCount(prevCount => Math.min(prevCount + increment, filteredProducts.length));
     };
 
     const handleShowLess = () => {
@@ -83,9 +108,9 @@ export function Products({ filters, sortType }: ProductsProps) {
     };
 
     return (
-        <div className="w-[976px]">
+        <div className="md:w-[976px]">
             <div
-                className="grid grid-cols-3 gap-16 mb-[70px] transition-all duration-500 ease-in-out"
+                className="px-6 gap-[19px] grid grid-cols-2 md:grid md:grid-cols-3 md:gap-16 md:mb-[70px] transition-all duration-500 ease-in-out"
                 style={{ maxHeight: `${visibleCount * 280}px`, overflow: 'hidden' }}
             >
                 {isLoading ? (
@@ -124,7 +149,7 @@ export function Products({ filters, sortType }: ProductsProps) {
             <div className='flex items-center justify-center'>
                 {visibleCount < filteredProducts.length ? (
                     <button
-                        className='w-[175px] h-[35px] bg-orange-400 text-white text-[14px] leading-5 font-bold transition duration-300 ease-in-out hover:bg-orange-500'
+                        className='mt-10 mb-10 w-[175px] h-[35px] bg-orange-400 text-white text-[14px] leading-5 font-bold transition duration-300 ease-in-out hover:bg-orange-500'
                         onClick={handleLoadMore}
                     >
                         CARREGAR MAIS
@@ -132,7 +157,7 @@ export function Products({ filters, sortType }: ProductsProps) {
                 ) : (
                     visibleCount > initialVisibleCount && (
                         <button
-                            className='w-[175px] h-[35px] bg-orange-400 text-white text-[14px] leading-5 font-bold transition duration-300 ease-in-out hover:bg-orange-500'
+                            className='mt-10 mb-10 w-[175px] h-[35px] bg-orange-400 text-white text-[14px] leading-5 font-bold transition duration-300 ease-in-out hover:bg-orange-500'
                             onClick={handleShowLess}
                         >
                             MOSTRAR MENOS

@@ -17,12 +17,12 @@ interface FilterContentProps {
     onFilterChange: (filters: {
         colors: string[];
         sizes: string[];
-        priceRange: { min: number; max: number } | null; 
+        priceRange: { min: number; max: number } | null;
     }) => void;
 }
 
 export function FilterContent({ onFilterChange }: FilterContentProps) {
-    const [visibleColorCount, setVisibleColorCount] = useState(5); 
+    const [visibleColorCount, setVisibleColorCount] = useState(5);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [selectedPriceRange, setSelectedPriceRange] = useState<{ min: number; max: number } | null>(null);
@@ -47,7 +47,7 @@ export function FilterContent({ onFilterChange }: FilterContentProps) {
 
     const handlePriceChange = (priceRange: { min: number; max: number }) => {
         const isSameRange = selectedPriceRange && selectedPriceRange.min === priceRange.min && selectedPriceRange.max === priceRange.max;
-        const newPriceRange = isSameRange ? null : priceRange; 
+        const newPriceRange = isSameRange ? null : priceRange;
         setSelectedPriceRange(newPriceRange);
     };
 
@@ -56,7 +56,8 @@ export function FilterContent({ onFilterChange }: FilterContentProps) {
     }, [selectedColors, selectedSizes, selectedPriceRange, onFilterChange]);
 
     return (
-        <aside className="w-[164px]">
+        <aside className="w-[164px] hidden md:block">
+            {/* Filtro de Cores */}
             <div className="mb-6">
                 <h2 className="text-lg tracking-widest leading-5 mb-[14px]">CORES</h2>
                 <div className={`overflow-hidden transition-max-height duration-500 ease-in-out ${visibleColorCount === 5 ? 'max-h-40' : 'max-h-[400px]'}`}>
@@ -78,6 +79,7 @@ export function FilterContent({ onFilterChange }: FilterContentProps) {
                 </button>
             </div>
 
+            {/* Filtro de Tamanhos */}
             <div>
                 <h2 className="text-lg tracking-widest leading-5 mb-[24px]">TAMANHOS</h2>
                 <ul className="grid grid-cols-4 gap-1 mb-[24px]">
@@ -100,6 +102,7 @@ export function FilterContent({ onFilterChange }: FilterContentProps) {
                 </ul>
             </div>
 
+            {/* Filtro de Preços */}
             <div className="w-[172px]">
                 <h2 className="text-lg tracking-widest leading-5 mb-[24px]">FAIXA DE PREÇO</h2>
                 {PRICE_RANGES.map((priceRange, index) => (

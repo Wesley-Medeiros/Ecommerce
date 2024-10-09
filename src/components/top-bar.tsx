@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Vector } from "./vector";
 
 interface TopBarProps {
-    onSortChange: (sortType: string) => void; 
+    onSortChange: (sortType: string) => void;
 }
 
 export function TopBar({ onSortChange }: TopBarProps) {
@@ -35,8 +35,9 @@ export function TopBar({ onSortChange }: TopBarProps) {
     }, [isDropdownOpen]);
 
     return (
-        <div className="px-40 py-8">
-            <div className="flex items-center justify-between">
+        <div className="px-6 md:px-40 py-8">
+            {/* Layout para telas grandes */}
+            <div className="hidden md:flex items-center justify-between">
                 <h1 className="text-4xl">Blusas</h1>
 
                 <div className="relative inline-block text-left" ref={dropdownRef}>
@@ -72,6 +73,19 @@ export function TopBar({ onSortChange }: TopBarProps) {
                             Maior Preço
                         </button>
                     </div>
+                </div>
+            </div>
+
+            {/* Layout para telas menores que 640px */}
+            <div className="md:hidden flex flex-col items-center space-y-3 ">
+                <h1 className="text-2xl">Blusas</h1>
+                <div className=" flex w-full">
+                    <button className="w-full max-w-xs px-[53px] py-2 text-[#666666] border border-[#666666]">
+                        Filtrar
+                    </button>
+                    <button className="w-full max-w-xs px-[53px] py-2 text-[#666666] border border-[#666666]">
+                        Ordenar
+                    </button>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ export default function Home() {
     return (
             <main className="flex flex-col">
                 <TopBar onSortChange={setSortType} />
-                <div className="flex px-40 py-8 gap-[200px]">
+                <div className="md:flex md:px-40 md:py-8 md:gap-[200px]">
                     <FilterContent onFilterChange={setFilters} />
                     <Products filters={filters} sortType={sortType} />
                 </div>
